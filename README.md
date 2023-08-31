@@ -5,7 +5,7 @@ Source-rer is a tool to save source code from JavaScript sourcemap files. You ca
 ## Installation
 
 ```bash
-git clone
+git clone https://github.com/ItzzMeGrrr/Source-rer
 cd source-rer
 pip install -r requirements.txt # or python3 -m pip install -r requirements.txt
 ```
