@@ -7,13 +7,13 @@ import shutil
 import argparse
 
 try:
+    from bs4 import BeautifulSoup
     from colorama import Fore
     import requests
-    from bs4 import BeautifulSoup
     import sourcemaps  # python-sourcemaps
 except ImportError:
-    print("Required modules not found. Please install them using:")
-    print("\t\033[32mpip install bs4 colorama python-sourcemaps requests\033[0m")
+    print("Required module(s) not found. Please install them using:")
+    print("\033[32mpip install -r requirements.txt\033[0m")
     exit(1)
 
 parser = argparse.ArgumentParser(description="Download source code from sourcemaps")
@@ -182,7 +182,18 @@ def save_original_source(sourcemap_data, output_directory):
     src = sourcemap_data["src"]
     source_content = get_sourcemap_content(source_type, src, link)
     if not source_content:
-        print_custom(f"Failed to download source for {link}", Fore.RED, override=True)
+        if source_type == "not-found":
+            print_custom(
+                f"  ^-- SourceMappingURL not found in {Fore.RED}{link}",
+                Fore.WHITE,
+                override=True,
+            )
+        else:
+            print_custom(
+                f"  ^-- Failed to download source for {Fore.RED}{link}",
+                Fore.WHITE,
+                override=True,
+            )
         return
     source_map_content = sourcemaps.decode(source_content).sources_content
     dump_content(source_map_content, output_directory)
@@ -211,7 +222,7 @@ def find_js_links(url):
 
 def main():
     global KEEP_NODE_MODULES, js_links, url, output_directory, VERBOSE
-
+    banner()
     if js_links:
         if not os.path.exists(js_links):
             print_custom(f"File not found: {js_links}", Fore.RED)
@@ -259,6 +270,19 @@ def main():
             "src": src[1],
         }
         save_original_source(data, output_directory)
+
+
+def banner():
+    global QUIET
+    if not QUIET:
+        print(
+            f"""{Fore.GREEN}            
+
+▒█▀▀▀█ █▀▀█ █░░█ █▀▀█ █▀▀ █▀▀ ░░ █▀▀█ █▀▀ █▀▀█ 
+░▀▀▀▄▄ █░░█ █░░█ █▄▄▀ █░░ █▀▀ ▀▀ █▄▄▀ █▀▀ █▄▄▀ 
+▒█▄▄▄█ ▀▀▀▀ ░▀▀▀ ▀░▀▀ ▀▀▀ ▀▀▀ ░░ ▀░▀▀ ▀▀▀ ▀░▀▀
+              {Fore.CYAN}- By github.com/ItzzMeGrrr{Fore.RESET}"""
+        )
 
 
 main()
