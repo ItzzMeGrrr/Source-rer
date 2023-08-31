@@ -19,8 +19,8 @@ except ImportError:
 parser = argparse.ArgumentParser(description="Download source code from sourcemaps")
 args_input = parser.add_mutually_exclusive_group(required=True)
 args_input.add_argument(
-    "-jl",
-    "--js-links",
+    "-l",
+    "--links",
     help="File containing js file links to download source code from",
 )
 args_input.add_argument("-u", "--url", help="Link to page find js links from")
@@ -64,7 +64,7 @@ def print_custom(text, color, type="info", override=False):
 
 
 KEEP_NODE_MODULES = args.keep
-js_links = args.js_links
+js_links = args.links
 url = args.url
 
 method = args.method
