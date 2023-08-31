@@ -16,7 +16,22 @@ except ImportError:
     print("\033[32mpip install -r requirements.txt\033[0m")
     exit(1)
 
-parser = argparse.ArgumentParser(description="Download source code from sourcemaps")
+parser = argparse.ArgumentParser(
+    formatter_class=argparse.RawDescriptionHelpFormatter,
+    description="""
+    
+▒█▀▀▀█ █▀▀█ █░░█ █▀▀█ █▀▀ █▀▀ ░░ █▀▀█ █▀▀ █▀▀█ 
+░▀▀▀▄▄ █░░█ █░░█ █▄▄▀ █░░ █▀▀ ▀▀ █▄▄▀ █▀▀ █▄▄▀ 
+▒█▄▄▄█ ▀▀▀▀ ░▀▀▀ ▀░▀▀ ▀▀▀ ▀▀▀ ░░ ▀░▀▀ ▀▀▀ ▀░▀▀
+
+Download source code from JavaScript sourcemaps
+""",
+    epilog="""
+Examples:
+    python download_src.py -l js_links.txt -o output_dir 
+    python3 download_src.py -u https://example.com -o output_dir -H 'Cookie: SESSION=1234567890' 
+""",
+)
 args_input = parser.add_mutually_exclusive_group(required=True)
 args_input.add_argument(
     "-l",
@@ -29,12 +44,9 @@ parser.add_argument(
     "-o", "--output", help="Output directory to save source code", required=True
 )
 parser.add_argument(
-    "-knm", "--keep", help="Keep node_modules, (default=off)", action="store_true"
-)
-parser.add_argument(
-    "-q",
-    "--quiet",
-    help="Don't print any output except errors",
+    "-knm",
+    "--keep",
+    help="Keep node_modules as well, (default: skip)",
     action="store_true",
 )
 parser.add_argument(
@@ -47,9 +59,15 @@ parser.add_argument(
 parser.add_argument(
     "-H",
     "--header",
-    help="HTTP header to add to request",
+    help="HTTP header to add to request (multiple -H flags are accepted)",
     action="append",
     default=[],
+)
+parser.add_argument(
+    "-q",
+    "--quiet",
+    help="Don't print any output except errors",
+    action="store_true",
 )
 parser.add_argument(
     "-v", "--verbose", help="Print  verbose output", action="store_true"
