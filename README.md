@@ -76,7 +76,7 @@ python3 download_src.py -u https://example.com -o output_dir -X POST
 
 #### Keep node_modules
 
-By default, node_modules are skipped. To keep them, use the `-k` flag.
+By default, node_modules are skipped. To keep them, use the `-knm` flag.
 
 ```bash
 python3 download_src.py -u https://example.com -o output_dir -knm
