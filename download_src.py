@@ -58,8 +58,11 @@ args = parser.parse_args()
 
 
 def print_custom(text, color, type="info", override=False):
-    global VERBOSE
-    if type == "info" or VERBOSE or override:
+    global VERBOSE, QUIET
+    if type == "info" or VERBOSE or override and not QUIET:
+        print(f"{color}{text}{Fore.RESET}")
+        return
+    if (QUIET and type == "err") or override:
         print(f"{color}{text}{Fore.RESET}")
 
 
@@ -79,6 +82,7 @@ if args.header:
 
 output_directory = args.output
 VERBOSE = args.verbose
+QUIET = args.quiet
 
 links = []
 source_mapping_urls = []
@@ -203,11 +207,18 @@ def find_js_links(url):
 def main():
     global KEEP_NODE_MODULES, js_links, url, output_directory, VERBOSE
 
+    if js_links:
+        if not os.path.exists(js_links):
+            print_custom(f"File not found: {js_links}", Fore.RED, "info")
+            exit(1)
+
     # Validate output directory
     if os.path.exists(output_directory):
         if os.listdir(output_directory):
-            print(
-                f"{Fore.RED}Output directory {output_directory} is not empty.{Fore.RESET}"
+            print_custom(
+                f"Output directory {output_directory} is not empty.",
+                Fore.YELLOW,
+                "info",
             )
             overwrite = input("Do you want to overwrite the existing files? (y/n): ")
             if overwrite.lower() == "y":
@@ -228,7 +239,11 @@ def main():
 
     # Save original source
     for url in source_mapping_urls:
-        print(f"Saving original source for {Fore.CYAN}{url}{Fore.RESET}")
+        print_custom(
+            f"Saving original source for {Fore.CYAN}{url}{Fore.RESET}",
+            Fore.WHITE,
+            "info",
+        )
         src = extract_sourcemap(fetch(url).text)
         data = {
             "link": url,
