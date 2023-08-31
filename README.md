@@ -58,7 +58,7 @@ python3 download_src.py -u https://example.com -o output_dir -H 'Cookie: SESSION
 python3 download_src.py -l js_links.txt -o output_dir
 ```
 
-### Specifying headers / method
+### Specifying headers/method
 
 #### Specify HTTP Headers
 
@@ -92,7 +92,7 @@ python3 download_src.py -u https://example.com -o output_dir -v
 
 #### Quiet output
 
-Use `-q` flag to not print any output except errors.
+Use the `-q` flag to not print any output except errors.
 
 ```bash
 python3 download_src.py -u https://example.com -o output_dir -q
