@@ -13,7 +13,7 @@ pip install -r requirements.txt # or python3 -m pip install -r requirements.txt
 ## Usage
 
 ```txt
-usage: download_src.py [-h] (-l LINKS | -u URL) -o OUTPUT [-knm] [-X {GET,POST}] [-H HEADER] [-q] [-v]
+usage: source-rer.py [-h] (-l LINKS | -u URL) -o OUTPUT [-knm] [-X {GET,POST}] [-H HEADER] [-q] [-v]
 
 
 ▒█▀▀▀█ █▀▀█ █░░█ █▀▀█ █▀▀ █▀▀ ░░ █▀▀█ █▀▀ █▀▀█
@@ -38,8 +38,8 @@ options:
   -v, --verbose         Print verbose output
 
 Examples:
-    python download_src.py -l js_links.txt -o output_dir
-    python3 download_src.py -u https://example.com -o output_dir -H 'Cookie: SESSION=1234567890'
+    python source-rer.py -l js_links.txt -o output_dir
+    python3 source-rer.py -u https://example.com -o output_dir -H 'Cookie: SESSION=1234567890'
 ```
 
 ## Examples
@@ -49,13 +49,13 @@ Examples:
 #### Download source code from a url
 
 ```bash
-python3 download_src.py -u https://example.com -o output_dir -H 'Cookie: SESSION=1234567890'
+python3 source-rer.py -u https://example.com -o output_dir -H 'Cookie: SESSION=1234567890'
 ```
 
 #### Provide a file containing links to js files
 
 ```bash
-python3 download_src.py -l js_links.txt -o output_dir
+python3 source-rer.py -l js_links.txt -o output_dir
 ```
 
 ### Specifying headers/method
@@ -63,13 +63,13 @@ python3 download_src.py -l js_links.txt -o output_dir
 #### Specify HTTP Headers
 
 ```bash
-python3 download_src.py -u https://example.com -o output_dir -H 'Cookie: SESSION=1234567890' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0'
+python3 source-rer.py -u https://example.com -o output_dir -H 'Cookie: SESSION=1234567890' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0'
 ```
 
 #### Specify HTTP Method
 
 ```bash
-python3 download_src.py -u https://example.com -o output_dir -X POST
+python3 source-rer.py -u https://example.com -o output_dir -X POST
 ```
 
 ### Other options
@@ -79,7 +79,7 @@ python3 download_src.py -u https://example.com -o output_dir -X POST
 By default, node_modules are skipped. To keep them, use the `-knm` flag.
 
 ```bash
-python3 download_src.py -u https://example.com -o output_dir -knm
+python3 source-rer.py -u https://example.com -o output_dir -knm
 ```
 
 #### Verbose output
@@ -87,7 +87,7 @@ python3 download_src.py -u https://example.com -o output_dir -knm
 To print verbose output, use the `-v` flag.
 
 ```bash
-python3 download_src.py -u https://example.com -o output_dir -v
+python3 source-rer.py -u https://example.com -o output_dir -v
 ```
 
 #### Quiet output
@@ -95,5 +95,5 @@ python3 download_src.py -u https://example.com -o output_dir -v
 Use the `-q` flag to not print any output except errors.
 
 ```bash
-python3 download_src.py -u https://example.com -o output_dir -q
+python3 source-rer.py -u https://example.com -o output_dir -q
 ```
