@@ -44,6 +44,8 @@ Examples:
 
 ## Examples
 
+### Providing input
+
 #### Download source code from a url
 
 ```bash
@@ -54,4 +56,44 @@ python3 download_src.py -u https://example.com -o output_dir -H 'Cookie: SESSION
 
 ```bash
 python3 download_src.py -l js_links.txt -o output_dir
+```
+
+### Specifying headers / method
+
+#### Specify HTTP Headers
+
+```bash
+python3 download_src.py -u https://example.com -o output_dir -H 'Cookie: SESSION=1234567890' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0'
+```
+
+#### Specify HTTP Method
+
+```bash
+python3 download_src.py -u https://example.com -o output_dir -X POST
+```
+
+### Other options
+
+#### Keep node_modules
+
+By default, node_modules are skipped. To keep them, use the `-k` flag.
+
+```bash
+python3 download_src.py -u https://example.com -o output_dir -knm
+```
+
+#### Verbose output
+
+To print verbose output, use the `-v` flag.
+
+```bash
+python3 download_src.py -u https://example.com -o output_dir -v
+```
+
+#### Quiet output
+
+Use `-q` flag to not print any output except errors.
+
+```bash
+python3 download_src.py -u https://example.com -o output_dir -q
 ```
