@@ -223,6 +223,7 @@ def main():
             print_custom(
                 f"Output directory {output_directory} is not empty.",
                 Fore.YELLOW,
+                override=True,
             )
             overwrite = input("Do you want to overwrite the existing files? (y/n): ")
             if overwrite.lower() == "y":
@@ -249,6 +250,7 @@ def main():
         print_custom(
             f"Saving original source for {Fore.CYAN}{url}{Fore.RESET}",
             Fore.WHITE,
+            override=True,
         )
         src = extract_sourcemap(fetch(url).text)
         data = {
