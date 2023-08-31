@@ -56,14 +56,15 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
+VERBOSE = args.verbose
+QUIET = args.quiet
 
-def print_custom(text, color, type="info", override=False):
+
+def print_custom(text, color, override=False):
     global VERBOSE, QUIET
-    if type == "info" or VERBOSE or override and not QUIET:
+    if (override or VERBOSE) and not QUIET:
         print(f"{color}{text}{Fore.RESET}")
         return
-    if (QUIET and type == "err") or override:
-        print(f"{color}{text}{Fore.RESET}")
 
 
 KEEP_NODE_MODULES = args.keep
@@ -74,15 +75,19 @@ method = args.method
 headers = {}
 if args.header:
     for header in args.header:
+        if header.count(":") < 1:
+            print_custom(
+                f"Invalid header {header}, header name and value should be separated by a colon ':' Ex. {Fore.CYAN}-H 'HeaderName: HeaderValue'",
+                Fore.YELLOW,
+                override=True,
+            )
         header_split = header.split(":")
-        if len(header_split) != 2:
-            print_custom(f"Invalid header: {header}", Fore.RED, override=True)
-            continue
-        headers.update({f"{header_split[0]}": f"{header_split[1]}"})
+        headers.update(
+            {f"{header_split[0].strip()}": f"{''.join(header_split[1:]).strip()}"}
+        )
 
 output_directory = args.output
-VERBOSE = args.verbose
-QUIET = args.quiet
+
 
 links = []
 source_mapping_urls = []
@@ -131,10 +136,10 @@ def dump_content(content, out_dir):
     global KEEP_NODE_MODULES
     for source in content:
         if not KEEP_NODE_MODULES and "node_modules" in source:
-            print_custom(f"Skipping {source}", Fore.YELLOW, "warn")
+            print_custom(f"Skipping {source}", Fore.YELLOW)
             continue
         filtered_source = sanatize_filename(source)
-        print_custom(f"Saving file {filtered_source}", Fore.GREEN, "info")
+        print_custom(f"Saving file {filtered_source}", Fore.GREEN)
         fileName = os.path.basename(filtered_source)
         path = os.path.dirname(urlparse(filtered_source).path)
         try:
@@ -177,7 +182,7 @@ def save_original_source(sourcemap_data, output_directory):
     src = sourcemap_data["src"]
     source_content = get_sourcemap_content(source_type, src, link)
     if not source_content:
-        print_custom(f"Failed to download source for {link}", Fore.YELLOW, "info")
+        print_custom(f"Failed to download source for {link}", Fore.RED, override=True)
         return
     source_map_content = sourcemaps.decode(source_content).sources_content
     dump_content(source_map_content, output_directory)
@@ -209,7 +214,7 @@ def main():
 
     if js_links:
         if not os.path.exists(js_links):
-            print_custom(f"File not found: {js_links}", Fore.RED, "info")
+            print_custom(f"File not found: {js_links}", Fore.RED)
             exit(1)
 
     # Validate output directory
@@ -218,7 +223,6 @@ def main():
             print_custom(
                 f"Output directory {output_directory} is not empty.",
                 Fore.YELLOW,
-                "info",
             )
             overwrite = input("Do you want to overwrite the existing files? (y/n): ")
             if overwrite.lower() == "y":
@@ -237,12 +241,14 @@ def main():
     if url:
         source_mapping_urls = find_js_links(url)
 
+    if not source_mapping_urls:
+        print(f"{Fore.RED}No JS files found.{Fore.RESET}")
+        exit(1)
     # Save original source
     for url in source_mapping_urls:
         print_custom(
             f"Saving original source for {Fore.CYAN}{url}{Fore.RESET}",
             Fore.WHITE,
-            "info",
         )
         src = extract_sourcemap(fetch(url).text)
         data = {
