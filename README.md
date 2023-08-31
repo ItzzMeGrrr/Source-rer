@@ -19,7 +19,7 @@ usage: download_src.py [-h] (-l LINKS | -u URL) -o OUTPUT [-knm] [-X {GET,POST}]
 ▒█▀▀▀█ █▀▀█ █░░█ █▀▀█ █▀▀ █▀▀ ░░ █▀▀█ █▀▀ █▀▀█
 ░▀▀▀▄▄ █░░█ █░░█ █▄▄▀ █░░ █▀▀ ▀▀ █▄▄▀ █▀▀ █▄▄▀
 ▒█▄▄▄█ ▀▀▀▀ ░▀▀▀ ▀░▀▀ ▀▀▀ ▀▀▀ ░░ ▀░▀▀ ▀▀▀ ▀░▀▀
-
+                - By github.com/ItzzMeGrrr
 Download source code from JavaScript sourcemaps
 
 options:
