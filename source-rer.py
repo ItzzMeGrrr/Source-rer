@@ -122,9 +122,23 @@ def fetch(url):
     global method, headers
     try:
         if method == "POST":
-            return requests.post(url, headers=headers)
+            res = requests.post(url, headers=headers)
+            if not res.status_code == 200:
+                print_custom(
+                    f"  ^-- Got status code: {Fore.RED}{res.status_code}{Fore.YELLOW} from '{url}'",
+                    Fore.YELLOW,
+                    override=True,
+                )
+            return res
         else:
-            return requests.get(url, headers=headers)
+            res = requests.get(url, headers=headers)
+            if not res.status_code == 200:
+                print_custom(
+                    f"  ^-- Got status code: {Fore.RED}{res.status_code}{Fore.YELLOW} from '{url}'",
+                    Fore.YELLOW,
+                    override=True,
+                )
+            return res
     except Exception as e:
         print(f"{Fore.RED}Exception:", e)
         print(f"{Fore.RESET}")
