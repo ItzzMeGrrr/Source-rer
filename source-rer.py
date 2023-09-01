@@ -281,9 +281,22 @@ def load_js_links(filename):
     with open(filename, "r") as file:
         for line in file:
             cleaned_line = line.strip()
-            if not cleaned_line.endswith(".js"):
+            try:
+                parsed_url = urlparse(cleaned_line)
+                path = parsed_url.path
+                file_extension = os.path.splitext(path)[1]
+                if not file_extension.lower() == ".js":
+                    print_custom(
+                        f"Ignoring non js link: {Fore.CYAN}{cleaned_line}",
+                        Fore.YELLOW,
+                    )
+                    invalid += 1
+                    continue
+            except:
                 print_custom(
-                    f"Ignoring non js link: {Fore.CYAN}{cleaned_line}", Fore.YELLOW
+                    f"Invalid URL: {Fore.RED}{cleaned_line}",
+                    Fore.RED,
+                    override=True,
                 )
                 invalid += 1
                 continue
