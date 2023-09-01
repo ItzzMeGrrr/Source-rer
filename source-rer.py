@@ -112,10 +112,11 @@ source_mapping_urls = []
 
 
 def sanatize_filename(filename):
-    filename = filename.replace("..", ".")
+    #remove multiple slashes and replace .. with .
+    filename = re.sub(r"(/)+", "/", filename.replace("..", "."))
+    #remove all characters except a-z, A-Z, 0-9, -, /, . and _
     pattern = r"[^a-zA-Z0-9\-/._]"
-    replacement = ""
-    return re.sub(pattern, replacement, filename)
+    return re.sub(pattern, "", filename)
 
 
 def fetch(url):
