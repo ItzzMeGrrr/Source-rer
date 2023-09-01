@@ -260,7 +260,7 @@ def find_js_links(url):
             final_js_file_urls.append(js_url)
 
     print_custom(
-        f"Found {Fore.CYAN}{len(final_js_file_urls)}{Fore.RESET} JS files",
+        f"Found {Fore.CYAN}{len(final_js_file_urls)}{Fore.WHITE} JS files",
         Fore.WHITE,
         override=True,
     )
@@ -282,10 +282,12 @@ def load_js_links(filename):
                 uniques += 1
             else:
                 duplicates += 1
-                print_custom(f"Ignoring duplicate line: {cleaned_line}", Fore.YELLOW)
+                print_custom(
+                    f"Ignoring duplicate line: {Fore.CYAN}{cleaned_line}", Fore.YELLOW
+                )
 
     print_custom(
-        f"Loaded {Fore.CYAN}{uniques}{Fore.RESET} unique and ignored {Fore.CYAN}{duplicates}{Fore.RESET} duplicate links",
+        f"Loaded {Fore.CYAN}{uniques}{Fore.WHITE} unique and ignored {Fore.CYAN}{duplicates}{Fore.WHITE} duplicate links",
         Fore.WHITE,
         override=True,
     )
