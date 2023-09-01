@@ -259,7 +259,38 @@ def find_js_links(url):
         else:
             final_js_file_urls.append(js_url)
 
+    print_custom(
+        f"Found {Fore.CYAN}{len(final_js_file_urls)}{Fore.RESET} JS files",
+        Fore.WHITE,
+        override=True,
+    )
     return final_js_file_urls
+
+
+def load_js_links(filename):
+    unique_lines = set()
+    uniques = 0
+    duplicates = 0
+    with open(filename, "r") as file:
+        for line in file:
+            # Remove leading/trailing whitespace and newline characters
+            cleaned_line = line.strip()
+
+            # Check if the cleaned line is not in the set
+            if cleaned_line not in unique_lines:
+                unique_lines.add(cleaned_line)
+                uniques += 1
+            else:
+                duplicates += 1
+                print_custom(f"Ignoring duplicate line: {cleaned_line}", Fore.YELLOW)
+
+    print_custom(
+        f"Loaded {Fore.CYAN}{uniques}{Fore.RESET} unique and ignored {Fore.CYAN}{duplicates}{Fore.RESET} duplicate links",
+        Fore.WHITE,
+        override=True,
+    )
+    unique_lines_list = list(unique_lines)
+    return unique_lines_list
 
 
 def main():
@@ -267,7 +298,7 @@ def main():
     banner()
     if js_links:
         if not os.path.exists(js_links):
-            print_custom(f"File not found: {js_links}", Fore.RED)
+            print_custom(f"File not found: {js_links}", Fore.RED, override=True)
             exit(1)
 
     # Validate output directory
@@ -290,8 +321,7 @@ def main():
 
     # Load js links
     if js_links:
-        with open(js_links, "r") as file:
-            source_mapping_urls = file.read().splitlines()
+        source_mapping_urls = load_js_links(js_links)
     if url:
         source_mapping_urls = find_js_links(url)
 
@@ -318,12 +348,12 @@ def banner():
     global QUIET
     if not QUIET:
         print(
-            f"""{Fore.GREEN}            
+            f"""{Fore.YELLOW}            
 
 ▒█▀▀▀█ █▀▀█ █░░█ █▀▀█ █▀▀ █▀▀ ░░ █▀▀█ █▀▀ █▀▀█ 
 ░▀▀▀▄▄ █░░█ █░░█ █▄▄▀ █░░ █▀▀ ▀▀ █▄▄▀ █▀▀ █▄▄▀ 
 ▒█▄▄▄█ ▀▀▀▀ ░▀▀▀ ▀░▀▀ ▀▀▀ ▀▀▀ ░░ ▀░▀▀ ▀▀▀ ▀░▀▀
-              {Fore.CYAN}- By github.com/ItzzMeGrrr{Fore.RESET}"""
+              {Fore.GREEN}- By github.com/ItzzMeGrrr{Fore.RESET}\n"""
         )
 
 
