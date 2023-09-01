@@ -112,9 +112,9 @@ source_mapping_urls = []
 
 
 def sanatize_filename(filename):
-    #remove multiple slashes and replace .. with .
+    # remove multiple slashes and replace .. with .
     filename = re.sub(r"(/)+", "/", filename.replace("..", "."))
-    #remove all characters except a-z, A-Z, 0-9, -, /, . and _
+    # remove all characters except a-z, A-Z, 0-9, -, /, . and _
     pattern = r"[^a-zA-Z0-9\-/._]"
     return re.sub(pattern, "", filename)
 
@@ -233,7 +233,16 @@ def save_original_source(sourcemap_data, output_directory):
 
 
 def find_js_links(url):
-    res = fetch(url)
+    # validate url using urlparse
+    parsed_url = urlparse(url)
+    if not parsed_url.scheme or not parsed_url.netloc:
+        print_custom(
+            f"Invalid URL: {url}",
+            Fore.RED,
+        )
+        exit(1)
+
+    res = fetch(parsed_url.geturl())
     soup = BeautifulSoup(res.text, "html.parser")
 
     script_tags = soup.find_all("script", src=True)
