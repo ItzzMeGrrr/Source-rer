@@ -200,11 +200,21 @@ def get_sourcemap_content(source_type, src, link):
         if res.status_code == 200:
             return res.text
         else:
+            print_custom(
+                f"  ^-- Got status code: {Fore.RED}{res.status_code}{Fore.YELLOW} for map link '{url}'",
+                Fore.YELLOW,
+                override=True,
+            )
             return None
     elif source_type == "data":
         try:
             return base64.b64decode(src).decode("utf-8")
         except:
+            print_custom(
+                f"  ^-- Failed to decode base64 sourcemap for {Fore.RED}{link}",
+                Fore.RED,
+                override=True,
+            )
             return None
     return None
 
@@ -224,7 +234,7 @@ def save_original_source(sourcemap_data, output_directory):
         else:
             print_custom(
                 f"  ^-- Failed to download source for {Fore.RED}{link}",
-                Fore.WHITE,
+                Fore.RED,
                 override=True,
             )
         return
@@ -236,10 +246,7 @@ def find_js_links(url):
     # validate url using urlparse
     parsed_url = urlparse(url)
     if not parsed_url.scheme or not parsed_url.netloc:
-        print_custom(
-            f"Invalid URL: {url}",
-            Fore.RED,
-        )
+        print_custom(f"Invalid URL: {url}", Fore.RED, override=True)
         exit(1)
 
     res = fetch(parsed_url.geturl())
@@ -270,24 +277,28 @@ def find_js_links(url):
 def load_js_links(filename):
     unique_lines = set()
     uniques = 0
-    duplicates = 0
+    invalid = 0
     with open(filename, "r") as file:
         for line in file:
-            # Remove leading/trailing whitespace and newline characters
             cleaned_line = line.strip()
+            if not cleaned_line.endswith(".js"):
+                print_custom(
+                    f"Ignoring non js link: {Fore.CYAN}{cleaned_line}", Fore.YELLOW
+                )
+                invalid += 1
+                continue
 
-            # Check if the cleaned line is not in the set
             if cleaned_line not in unique_lines:
                 unique_lines.add(cleaned_line)
                 uniques += 1
             else:
-                duplicates += 1
+                invalid += 1
                 print_custom(
                     f"Ignoring duplicate line: {Fore.CYAN}{cleaned_line}", Fore.YELLOW
                 )
 
     print_custom(
-        f"Loaded {Fore.CYAN}{uniques}{Fore.WHITE} unique and ignored {Fore.CYAN}{duplicates}{Fore.WHITE} duplicate links",
+        f"Loaded {Fore.CYAN}{uniques}{Fore.WHITE} unique and ignored {Fore.CYAN}{invalid}{Fore.WHITE} duplicate/invalid links",
         Fore.WHITE,
         override=True,
     )
@@ -359,4 +370,8 @@ def banner():
         )
 
 
-main()
+try:
+    main()
+except KeyboardInterrupt:
+    print_custom("\nExiting...", Fore.RED)
+    exit(1)
