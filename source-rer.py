@@ -311,7 +311,7 @@ def load_js_links(filename):
                 )
 
     print_custom(
-        f"Loaded {Fore.CYAN}{uniques}{Fore.WHITE} unique and ignored {Fore.CYAN}{invalid}{Fore.WHITE} duplicate/invalid links",
+        f"Loaded {Fore.CYAN}{uniques}{Fore.WHITE} links and ignored {Fore.CYAN}{invalid}{Fore.WHITE} duplicate/invalid links",
         Fore.WHITE,
         override=True,
     )
